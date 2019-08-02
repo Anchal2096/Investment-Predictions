@@ -1,5 +1,11 @@
 import pandas as pd
+from sklearn import svm
+# for plotting features
+# import seaborn as sns
+# import matplotlib.pyplot as plt
 from Datasets.Dictionary import answers
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+from sklearn.model_selection import train_test_split
 
 # these are the columns / questions that are to be removed from the csv file.
 # these are hence irrelevant questions
@@ -8,6 +14,8 @@ col_to_remove = ["Timestamp", "Please state your gender", "Does your household h
                  "Money is there to be spent", "If yes, how did you manage to make ends meet?",
                  "What is your view about saving money?"]
 
+df = pd.read_csv("F:/Pycharm/Investment-Predictions/Datasets/Investment_Prediction(csv).csv")
+# print(df.shape)
 
 """Variable dataset declared for the counting of zeroes and ones in the answers"""
 
@@ -20,13 +28,7 @@ for i in range(0, 212):
 print(count_of_answers_given_by_person)
 
 the_ultimate_response_list = []
-""""""
 
-# data frame from the original file to read
-df = pd.read_csv("F:\Pycharm\Investment-Predictions\Datasets\Investment_Prediction(csv).csv")
-# print(df.shape)
-
-# replacing those values which are N/A by 0
 df.fillna(0, inplace=True)
 
 for column in col_to_remove:
@@ -36,8 +38,9 @@ print(df.shape)
 df.drop(df.index[[0]], inplace=True)
 # print(df.shape)
 
-df.to_csv("F:\Pycharm\Investment-Predictions\Datasets\Investment_Prediction_munged.csv", index=False)
-munged_df = pd.read_csv("F:\Pycharm\Investment-Predictions\Datasets\Investment_Prediction_munged.csv")
+df.to_csv("F:/Pycharm/Investment-Predictions/Datasets/Investment_Prediction_munged.csv", index=False)
+
+munged_df = pd.read_csv("F:/Pycharm/Investment-Predictions/Datasets/Investment_Prediction_munged.csv")
 # print(munged_df)
 columns = list(munged_df)
 print(columns)
@@ -62,20 +65,22 @@ for questions in range(25):
         elif value in answers[num][1]:
             index = response_list.index(value)
             response_list[index] = 1
+
+    # some answers are having 1.0 (float as their values) .. why?
+    # print(f"length {len(response_list)} : ques {questions} : ", response_list)
+    the_ultimate_response_list.append(response_list)
+
+    """for column in range(len(columns)):
+        print(columns[column])
+        df[columns[column]] = response_list"""
+
     print(response_list)
     # print(columns[questions])
     munged_df[columns[questions]] = response_list
 
-    # print(f"length {len(response_list)} : ques {questions} : ", response_list)
-    the_ultimate_response_list.append(response_list)
-
     num += 1
     response_list = []
     ans_list = []
-# print(munged_df)
-"""to find how many value are nan/NAN"""
-# print(df[df.isna().any(axis=1)])
-
 
 
 """---------------------------------------------------------------------------------------------------------"""
@@ -97,6 +102,12 @@ for dictionary in count_of_answers_given_by_person.values():
     num += 1
 
 print(len(count_of_answers_given_by_person))
+
+
+# print(munged_df)
+
+"""to find how many value are nan/NAN"""
+# print(df[df.isna().any(axis=1)])
 
 
 """----------------------------------------------------------------------------------------------"""
@@ -128,5 +139,23 @@ for val in count_of_answers_given_by_person.values():
         num += 1
 
 munged_df["target"] = predicted_outcome
-munged_df.to_csv("F:\Pycharm\Investment-Predictions\Datasets\Investment_Prediction_classified_data.csv", index=False)
+munged_df.to_csv("F:/Pycharm/Investment-Predictions/Datasets/Investment_Prediction_classified_data.csv", index=False)
 
+
+"""""""------------------------------------------------------------------------------------------------"""""""
+classified_dataframe = pd.read_csv("F:/Pycharm/Investment-Predictions/Datasets/Investment_Prediction_classified_data"
+                                   ".csv")
+x = classified_dataframe.iloc[:, :-1]
+y = classified_dataframe['target']
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+clf = svm.SVC(kernel='linear')
+
+clf.fit(x_train, y_train)
+
+y_pred = clf.predict(x_test)
+
+# for model evaluation
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+print("Accuracy of the model : ", accuracy_score(y_pred=y_pred, y_true=y_test))
