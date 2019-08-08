@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 
 from Datasets.Dictionary import answers
 
-from functions.variables import *
+from Functions.variables import *
 
 
 # function requires raw/original csv file and the list of columns to remove from the csv file
@@ -62,7 +62,7 @@ def class_representations(csv_file):
             print(columns[column])
             df[columns[column]] = response_list"""
 
-        print(response_list)
+        # print(response_list)
         # print(columns[questions])
         munged_df[columns[questions]] = response_list
 
@@ -134,7 +134,7 @@ def classifier_and_prediction(csv_file):
     classified_dataframe = pd.read_csv(csv_file)
     x = classified_dataframe.iloc[:, :-1]
     y = classified_dataframe['target']
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.8)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.5)
 
     clf = svm.SVC(kernel='linear')
 
@@ -145,4 +145,5 @@ def classifier_and_prediction(csv_file):
     # for model evaluation
     print(confusion_matrix(y_test, y_pred))
     print(classification_report(y_test, y_pred))
-    print("Accuracy of the model : ", accuracy_score(y_pred=y_pred, y_true=y_test))
+    print("Accuracy of the model : "
+          ".", accuracy_score(y_pred=y_pred, y_true=y_test))
