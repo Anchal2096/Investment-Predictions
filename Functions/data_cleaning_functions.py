@@ -68,14 +68,13 @@ def class_representations(csv_file):
 
         num += 1
         response_list = []
-        ans_list = []
     return munged_df, the_ultimate_response_list
 
 
 # data details for printing
 def print_data_details(the_ultimate_response_list):
-    for i in range(25):
-        print(the_ultimate_response_list[i])
+    for column_index in range(25):
+        print(the_ultimate_response_list[column_index])
 
     num = 1
     count_all_responses(the_ultimate_response_list)
@@ -109,7 +108,7 @@ def adding_target_to_munged_csv_file(munged_csv_df, classified_csv_file, count_o
         else:
             predicted_outcome.append(0)
 
-    print(len(predicted_outcome), "\n", predicted_outcome)
+    # print(len(predicted_outcome), "\n", predicted_outcome)
     munged_csv_df["target"] = predicted_outcome
     munged_csv_df.to_csv(classified_csv_file, index=False)
     return predicted_outcome
