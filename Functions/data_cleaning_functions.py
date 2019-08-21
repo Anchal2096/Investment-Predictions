@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 
 from Datasets.Dictionary import answers
 
-from Functions.variables import *
+from functions.variables import *
 
 
 # function requires raw/original csv file and the list of columns to remove from the csv file
@@ -62,7 +62,7 @@ def class_representations(csv_file):
             print(columns[column])
             df[columns[column]] = response_list"""
 
-        # print(response_list)
+        print(response_list)
         # print(columns[questions])
         munged_df[columns[questions]] = response_list
 
@@ -73,8 +73,8 @@ def class_representations(csv_file):
 
 # data details for printing
 def print_data_details(the_ultimate_response_list):
-    for column_index in range(25):
-        print(the_ultimate_response_list[column_index])
+    for i in range(25):
+        print(the_ultimate_response_list[i])
 
     num = 1
     count_all_responses(the_ultimate_response_list)
@@ -108,7 +108,7 @@ def adding_target_to_munged_csv_file(munged_csv_df, classified_csv_file, count_o
         else:
             predicted_outcome.append(0)
 
-    # print(len(predicted_outcome), "\n", predicted_outcome)
+    print(len(predicted_outcome), "\n", predicted_outcome)
     munged_csv_df["target"] = predicted_outcome
     munged_csv_df.to_csv(classified_csv_file, index=False)
     return predicted_outcome
@@ -133,8 +133,7 @@ def classifier_and_prediction(csv_file):
     classified_dataframe = pd.read_csv(csv_file)
     x = classified_dataframe.iloc[:, :-1]
     y = classified_dataframe['target']
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.5)
-
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
     clf = svm.SVC(kernel='linear')
 
     clf.fit(x_train, y_train)
@@ -142,7 +141,4 @@ def classifier_and_prediction(csv_file):
     y_pred = clf.predict(x_test)
 
     # for model evaluation
-    print(confusion_matrix(y_test, y_pred))
-    print(classification_report(y_test, y_pred))
-    print("Accuracy of the model : "
-          ".", accuracy_score(y_pred=y_pred, y_true=y_test))
+    return x_test, y_test, clf, confusion_matrix(y_test, y_pred), classification_report(y_test, y_pred), accuracy_score(y_pred=y_pred, y_true=y_test)
