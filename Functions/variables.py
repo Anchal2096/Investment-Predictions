@@ -8,7 +8,7 @@ for i in range(0, 212):
     count_of_answers_given_by_person[i] = {"zeroes_count": 0, "ones_count": 0}
 
 # change the path of the original csv file according to your OS
-original_csv_file = "/home/atrivedi/Investment-Predictions/Datasets/Investment_Prediction(csv).csv"
+original_csv_file = "F:/Pycharm/Investment-Predictions/Datasets/Investment_Prediction(csv).csv"
 
 # these are the columns / questions that are to be removed from the csv file.
 # these are hence irrelevant questions

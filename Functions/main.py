@@ -1,17 +1,19 @@
-from functions.data_cleaning_functions import *
-from functions.variables import *
-from functions.saving_and_loading_this_model import *
+from Functions.data_cleaning_functions import *
+from Functions.variables import *
+from Functions.saving_and_loading_this_model import *
 
 if __name__ == "__main__":
-    new_csv_file_with_removed_columns = csv_file_clean(original_csv_file, col_to_remove, "/home/atrivedi/Investment-Predictions/Datasets/Investment_Prediction_munged1.csv")
+    new_csv_file_with_removed_columns = csv_file_clean(original_csv_file, col_to_remove, "F:/Pycharm/Investment"
+                                                                                         "-Predictions/Datasets"
+                                                                                         "/Investment_Prediction_munged1.csv")
 
     munged_df, the_ultimate_response_list = class_representations(new_csv_file_with_removed_columns)
 
     count_of_answers_by_person = count_all_responses(the_ultimate_response_list)
 
-    predicted_outcome = adding_target_to_munged_csv_file(munged_df, "/home/atrivedi/Investment-Predictions/Datasets/Investment_Prediction_classified_data1.csv", count_of_answers_by_person)
+    predicted_outcome = adding_target_to_munged_csv_file(munged_df, "F:/Pycharm/Investment-Predictions/Datasets/Investment_Prediction_classified_data1.csv", count_of_answers_by_person)
 
-    x_test, y_test, classifier, confusion_matrix, classification_report, accuracy_score = classifier_and_prediction("/home/atrivedi/Investment-Predictions/Datasets/Investment_Prediction_classified_data1.csv")
+    x_test, y_test, classifier, confusion_matrix, classification_report, accuracy_score = classifier_and_prediction("F:/Pycharm/Investment-Predictions/Datasets/Investment_Prediction_classified_data1.csv")
 
     print(f"Confusion Matrix \n {confusion_matrix}")
     print(f"Classification Report \n {classification_report}")
@@ -23,7 +25,7 @@ if __name__ == "__main__":
 
     loop_count = 0
     while accuracy_score < 0.95:
-        _, _, classifier, _, _, accuracy_score = classifier_and_prediction("/home/atrivedi/Investment-Predictions/Datasets/Investment_Prediction_classified_data1.csv")
+        _, _, classifier, _, _, accuracy_score = classifier_and_prediction("F:/Pycharm/Investment-Predictions/Datasets/Investment_Prediction_classified_data1.csv")
         print(f"Accuracy Score for loop count {loop_count}:", accuracy_score)
         loop_count += 1
     else:
